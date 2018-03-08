@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    hello
+
+    {% for user in users %}
+        {{ user }}<br>
+    {% else %}
+        <p class="text-muted">No users yet.</p>
+    {% endfor %}
+
 {% endblock %}

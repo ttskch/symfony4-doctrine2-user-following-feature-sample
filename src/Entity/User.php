@@ -32,4 +32,9 @@ class User
     {
         return $this->id;
     }
+
+    public function __toString()
+    {
+        return $this->username;
+    }
 }
