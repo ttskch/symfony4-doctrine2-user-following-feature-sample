@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -42,6 +43,22 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="simple_array")
      */
     public $roles;
+
+    /**
+     * @var Collection|UserRelation[]
+     *
+     * @ORM\OneToMany(targetEntity="UserRelation", mappedBy="followee", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OrderBy({"createdAt"="DESC"})
+     */
+    public $followerRelations;
+
+    /**
+     * @var Collection|UserRelation[]
+     *
+     * @ORM\OneToMany(targetEntity="UserRelation", mappedBy="follower", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OrderBy({"createdAt"="DESC"})
+     */
+    public $followeeRelations;
 
     public function __construct()
     {
@@ -95,7 +112,63 @@ class User implements UserInterface, \Serializable
         ) = unserialize($serialized);
     }
 
+    public function follow(User $user): self
     {
+        if ($user === $this) {
+            throw new \LogicException('You cannot follow yourself.');
+        }
+
+        $this->followeeRelations->add($relation = new UserRelation($this, $user));
+        $user->followerRelations->add($relation);
+
+        return $this;
+    }
+
+    public function unfollow(User $user): self
+    {
+        foreach ($this->followeeRelations as $followeeRelation) {
+            if ($followeeRelation->followee === $user) {
+                $this->followeeRelations->removeElement($followeeRelation);
+                break;
+            }
+        }
+
+        foreach ($user->followerRelations as $followerRelation) {
+            if ($followerRelation->follower === $this) {
+                $user->followerRelations->removeElement($followerRelation);
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getFollowers(): array
+    {
+        $followers = [];
+
+        foreach ($this->followerRelations as $followerRelation) {
+            $followers[] = $followerRelation->follower;
+        }
+
+        return $followers;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getFollowees(): array
+    {
+        $followees = [];
+
+        foreach ($this->followeeRelations as $followeeRelation) {
+            $followees[] = $followeeRelation->followee;
+        }
+
+        return $followees;
     }
 
     public function __toString(): string

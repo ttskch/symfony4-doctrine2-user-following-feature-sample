@@ -2,10 +2,53 @@
 
 {% block content %}
 
-    {% for user in users %}
-        {{ user }}<br>
-    {% else %}
-        <p class="text-muted">No users yet.</p>
-    {% endfor %}
+    <h3 class="mb-4">User list</h3>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>user</th>
+            <th>followers</th>
+            <th>followees</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+
+            <tr>
+                <td>{{ user }}</td>
+                <td>
+                    {% for follower in user.followers %}
+                        <span class="badge badge-secondary">{{ follower }}</span>
+                    {% else %}
+                        <small class="text-muted">No followers yet</small>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for followee in user.followees %}
+                        <span class="badge badge-secondary">{{ followee }}</span>
+                    {% else %}
+                        <small class="text-muted">No followees yet</small>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if user == app.user %}
+                        <span class="font-weight-bold">It's you</span>
+                    {% elseif user in app.user.followees %}
+                        <a href="{{ path('user_unfollow', {username: user.username}) }}" class="btn btn-sm btn-outline-primary">Unfollow</a>
+                    {% else %}
+                        <a href="{{ path('user_follow', {username: user.username}) }}" class="btn btn-sm btn-primary">Follow</a>
+                    {% endif %}
+                </td>
+            </tr>
+
+        {% else %}
+            <tr>
+                <td class="text-muted">No users yet.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}

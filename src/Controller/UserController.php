@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -30,5 +32,33 @@ class UserController extends Controller
             'error' => $error,
             'last_username' => $lastUsername,
         ];
+    }
+
+    /**
+     * @Route("/follow/{username}", name="follow")
+     */
+    public function follow(User $user, Request $request)
+    {
+        $this->getUser()->follow($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($this->getUser());
+        $em->flush();
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/unfollow/{username}", name="unfollow")
+     */
+    public function unfollow(User $user, Request $request)
+    {
+        $this->getUser()->unfollow($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($this->getUser());
+        $em->flush();
+
+        return $this->redirect($request->headers->get('referer'));
     }
 }
