@@ -50,6 +50,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "compile": [
+            "bin/console doctrine:schema:update --force"
         ]
     },
     "conflict": {
