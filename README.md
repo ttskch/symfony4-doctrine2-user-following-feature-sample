@@ -1,6 +1,14 @@
 # symfony4-doctrine2-user-following-feature-sample
 
-## Usage
+**Sample app with user following feature implemented with Symfony4 + Doctrine2**
+
+![](https://i.gyazo.com/d2b1592b53d0ef794f5c469bd7c4eb78.gif)
+
+## Live demo
+
+👉 http://symfony4-doctrine2-user-follow.herokuapp.com
+
+## Usage for local trying
 
 ```
 $ git clone git@github.com:ttskch/symfony4-doctrine2-user-following-feature-sample.git sample
@@ -9,6 +17,4 @@ $ composer install
 $ php -S localhost:8000 -t public
 ```
 
-And browse http://localhost:8000 then you can see live demo like below :+1:
-
-![](https://i.gyazo.com/97806835be2166d478892eefb0df27d2.gif)
+And browse http://localhost:8000

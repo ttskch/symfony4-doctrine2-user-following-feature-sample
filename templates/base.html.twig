@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>{% block title %}Sample{% endblock %}</title>
+    <title>{% block title %}Sample app with user following feature implemented with Symfony4 + Doctrine2{% endblock %}</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <style>
@@ -15,7 +15,7 @@
 <body>
     <nav class="navbar navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">{{ block('title') }}</a>
+            <a class="navbar-brand" href="https://github.com/ttskch/symfony4-doctrine2-user-following-feature-sample">See on GitHub</a>
             <ul class="navbar-nav ml-auto">
                 {% if is_granted('ROLE_USER') %}
                     <li class="nav-item">
@@ -25,6 +25,14 @@
             </ul>
         </div>
     </nav>
+
+    <div class="container my-3">
+        <div class="card">
+            <div class="card-body">
+                {{ block('title') }}
+            </div>
+        </div>
+    </div>
 
     <div class="container my-4">
         {% block content %}
