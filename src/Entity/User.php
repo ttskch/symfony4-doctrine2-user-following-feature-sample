@@ -148,13 +148,9 @@ class User implements UserInterface, \Serializable
      */
     public function getFollowers(): array
     {
-        $followers = [];
-
-        foreach ($this->followerRelations as $followerRelation) {
-            $followers[] = $followerRelation->follower;
-        }
-
-        return $followers;
+        return $this->followerRelations->map(function (UserRelation $userRelation) {
+            return $userRelation->follower;
+        })->toArray();
     }
 
     /**
@@ -162,13 +158,9 @@ class User implements UserInterface, \Serializable
      */
     public function getFollowees(): array
     {
-        $followees = [];
-
-        foreach ($this->followeeRelations as $followeeRelation) {
-            $followees[] = $followeeRelation->followee;
-        }
-
-        return $followees;
+        return $this->followeeRelations->map(function (UserRelation $userRelation) {
+            return $userRelation->followee;
+        })->toArray();
     }
 
     public function __toString(): string
